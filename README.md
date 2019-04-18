@@ -52,3 +52,10 @@
     }
 }
 ```
+
+## fix CORS errors
+
+*Errors such as `No 'Access-Control-Allow-Origin' header is present` appear in the browser console when we try to get data from the API and the requests origin from a different domain*
+
+* Add a middleware to app.js in order to set appropriate headers so that CORS errors are fixed.
+
