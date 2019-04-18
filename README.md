@@ -59,3 +59,27 @@
 
 * Add a middleware to app.js in order to set appropriate headers so that CORS errors are fixed.
 
+
+
+## minimal frontend for testing
+
+* Crate a minimal web page for testing GET and POST requests.
+* In order to succesfully create JSON data by sending a POST request, the body content has to be stringified and the content-type has to be set to `application/json`.
+```
+postButton.addEventListener('click', () => {
+  fetch('http://localhost:8080/feed/post', {
+    method: 'POST',
+    body: JSON.stringify({
+      title: 'Test Post',
+      content: ' This is the test post content.'
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+    
+  })
+    .then(res => res.json())
+    .then(resData => console.log(resData))
+    .catch(error => console.log(error));
+});
+```
