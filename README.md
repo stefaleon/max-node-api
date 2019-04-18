@@ -27,4 +27,28 @@
 }
 ```
 
+## create 
 
+* Configure the `createPost` action in the `feed` controller.
+* Add the POST route for the creation of posts to feed.js in the routes folder.
+
+*Now POST requests can be submitted to `http://localhost:8080/feed/post`.*
+*In Postman, in the `Body` tag select `raw - JSON(application/json)` and set the following content*
+```
+{
+	"title": "Create post testing",
+	"content": "This is the content of the POST test..."
+}
+```
+*Then the following response is received:*
+```
+{
+    "message": "New post created.",
+    "post": {
+        "id": "2019-04-18T10:38:49.503Z",
+        "title": "Create post testing",
+        "content": "This is the content of the POST test...",
+        "createdAt": "2019-04-18T10:38:49.503Z"
+    }
+}
+```
