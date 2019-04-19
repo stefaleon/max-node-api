@@ -114,3 +114,8 @@ __proto__: Object
 
 *Connection data are provided from the `private` folder files, ignored by git.*
 
+
+## model
+
+* Set up a mongoose model. Create the `models` folder and configure the model for the posts in `post.js`.
+* Pass the `timestamps` argument to the schema constructor in order to have the `createdAt` and `updatedAt` timestamps automatically created by mongoose.
