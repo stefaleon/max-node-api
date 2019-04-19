@@ -144,3 +144,10 @@ __proto__: Object
 
 * Configure the `getPost` action in `feed.js` in the controllers folder.
 * Add a route for getting a single post in `feed.js` in the routes folder.
+
+
+## update posts
+
+* Configure the `updatePost` action in `feed.js` in the controllers folder.
+* Add a PUT route for updating a post in `feed.js` in the routes folder.
+* Add server side validation as a middleware to the route.

@@ -62,3 +62,33 @@ exports.getPost = (req, res, next) => {
     })
     .catch(err => reachNextError(err));
 };
+
+
+exports.updatePost = (req, res, next) => {
+  const postId = req.params.postId;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation error.');
+    error.statusCode = 422;
+    throw error;
+  }
+  const title = req.body.title;
+  const content = req.body.content;
+  Post.findById(postId)
+  .then(post => {
+    if (!post) {
+      const error = new Error('Post not found.');
+      error.statusCode = 404;
+      throw error;
+    }
+    post.title = title;
+    post.content = content;
+    return post.save();
+  })
+  .then(result => {
+    res.status(200).json({message: 'Post updated.', post: result });
+  })
+  .catch(err => reachNextError(err));
+
+
+};
