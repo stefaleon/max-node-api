@@ -13,6 +13,8 @@
   <p><button id="post">Create a Post</button></p>
   <p><button id="errored-post">Create an Errored Post</button></p>
 
+  <div id="display-posts">Posts Display Area</div>
+
   
   <script>
 
@@ -23,7 +25,19 @@
     getButton.addEventListener('click', () => {
       fetch('http://localhost:8080/feed/posts')
         .then(res => res.json())
-        .then(resData => console.log(resData))
+        .then(resData => {
+          console.log(resData);          
+          const postsDisplayArea = document.getElementById('display-posts');          
+          let counter = 0;
+          postsDisplayArea.innerHTML = '';
+          for (post in resData.posts) {            
+            postsDisplayArea.innerHTML +=
+             `<a href="http://localhost:8080/feed/post/${resData.posts[counter]._id}" target="_blank">
+              <p>${counter + 1} ${resData.posts[counter].title}</p></a>`;
+            counter++;
+          }
+          
+        })
         .catch(error => console.log(error));
     });
 

@@ -138,3 +138,9 @@ __proto__: Object
 ## get posts from the db
 
 * Configure the `getPosts` action in `feed.js` in the controllers folder in order to find and fetch the posts from the database.
+
+
+## get a single post
+
+* Configure the `getPost` action in `feed.js` in the controllers folder.
+* Add a route for getting a single post in `feed.js` in the routes folder.
