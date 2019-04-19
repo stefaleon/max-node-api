@@ -119,3 +119,8 @@ __proto__: Object
 
 * Set up a mongoose model. Create the `models` folder and configure the model for the posts in `post.js`.
 * Pass the `timestamps` argument to the schema constructor in order to have the `createdAt` and `updatedAt` timestamps automatically created by mongoose.
+
+
+## create posts in the db
+
+* Require the posts' model in `feed.js` in the controllers folder, and configure the createPost method in order to save the created posts to the db.
