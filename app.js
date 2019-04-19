@@ -1,6 +1,11 @@
 const express = require('express');
+const mongoose = require('mongoose');
 
 const feedRoutes = require('./routes/feed');
+const private = require('./private/private.js');
+
+const PORT = process.env.PORT || 8080;
+const dbURL = process.env.dbURL || private.dbURL;
 
 const app = express();
 
@@ -15,4 +20,12 @@ app.use((req, res, next) => {
 
 app.use('/feed', feedRoutes);
 
-app.listen(8080);
+mongoose
+    .connect(dbURL)
+    .then(result => {
+        app.listen(PORT, process.env.IP, () => {
+            console.log(`App listening on port ${PORT}.`);
+        });
+    })
+    .catch(err => console.log(err));
+

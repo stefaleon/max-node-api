@@ -107,3 +107,10 @@ __proto__: Object
 ```
 
 
+## connect to db
+
+* `npm install --save mongoose`
+* Require mongoose in app.js and connect to a MongoDB database.
+
+*Connection data are provided from the `private` folder files, ignored by git.*
+
