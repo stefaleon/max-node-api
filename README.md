@@ -83,3 +83,27 @@ postButton.addEventListener('click', () => {
     .catch(error => console.log(error));
 });
 ```
+
+
+## server side validation
+
+*Validation example for a minimum length of 5 characters for both the `title` and the `content` fields*
+
+* `npm install express-validator --save`
+* Configure `feed.js` in the routes folder, in order to check the request body. Require the related component and add the related middleware to the POST route.
+* Configure `feed.js` in the controllers folder, in order to receive and use the validation result. Use the `validationResult` function on the request in order to create the `errors` constant. Return a status code of 422 if errors exist.
+
+*Testing with a dummy harcoded POST request where the `title` is 4 characters long, using Opera Version:60.0.3255.27, the console display is:*
+```
+POST http://localhost:8080/feed/post 422 (Unprocessable Entity)
+front-end-for-testing.html:60 
+{message: "Validation error.", errors: Array(1)}
+errors: Array(1)
+0: {location: "body", param: "title", value: "  1234 ", msg: "Invalid value"}
+length: 1
+__proto__: Array(0)
+message: "Validation error."
+__proto__: Object
+```
+
+
