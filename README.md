@@ -124,3 +124,12 @@ __proto__: Object
 ## create posts in the db
 
 * Require the posts' model in `feed.js` in the controllers folder, and configure the createPost method in order to save the created posts to the db.
+
+
+## handle errors
+
+* In the createPost method in `feed.js` in the controllers folder, handle the validation errors by use of the `Error` object. 
+* Set the `statusCode` custom property to 422 and throw the error, so that the function execution is exited and the next error handling middleware is reached. 
+* In the catch block, if the statusCode is not set, set it to 500.
+* The catch block is a piece of the promise chain and since throwing an error inside an async code snippet does not reach the next error handler, use the `next` function and pass the error to it. 
+* Configure `app.js` in order to use an error handling middleware that will be executed whenever an error is thrown or forwarded with `next`.
