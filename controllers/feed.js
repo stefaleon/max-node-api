@@ -2,17 +2,22 @@ const { validationResult } = require('express-validator/check');
 
 const Post = require('../models/post');
 
+const reachNextError = err => {
+  if (!err.statusCode) {
+    err.statusCode = 500;
+  }
+  next(err);
+};
+
 exports.getPosts = (req, res, next) => {
-  res.status(200).json({
-    posts: [
-      {
-        _id: '1',
-        title: 'Test Post Number 1',
-        content: 'This is a post for the Node API initial testing.',
-        createdAt: new Date()
-      }
-    ]
-  });
+  Post.find()
+  .then(posts => {    
+    res.status(200).json({
+      message: 'Posts fetched',
+      posts
+    });
+  })
+  .catch(err => reachNextError(err));  
 };
 
 exports.createPost = (req, res, next) => {
@@ -20,10 +25,10 @@ exports.createPost = (req, res, next) => {
   if (!errors.isEmpty()) {
     const error = new Error('Validation error.');
     error.statusCode = 422;
-    throw error;      
+    throw error;
   }
   const title = req.body.title;
-  const content = req.body.content;  
+  const content = req.body.content;
   const post = new Post({
     title,
     content,
@@ -37,10 +42,5 @@ exports.createPost = (req, res, next) => {
         post: result
       });
     })
-    .catch(err => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
+    .catch(err => reachNextError(err));
 };

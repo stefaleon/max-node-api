@@ -133,3 +133,8 @@ __proto__: Object
 * In the catch block, if the statusCode is not set, set it to 500.
 * The catch block is a piece of the promise chain and since throwing an error inside an async code snippet does not reach the next error handler, use the `next` function and pass the error to it. 
 * Configure `app.js` in order to use an error handling middleware that will be executed whenever an error is thrown or forwarded with `next`.
+
+
+## get posts from the db
+
+* Configure the `getPosts` action in `feed.js` in the controllers folder in order to find and fetch the posts from the database.
