@@ -151,3 +151,11 @@ __proto__: Object
 * Configure the `updatePost` action in `feed.js` in the controllers folder.
 * Add a PUT route for updating a post in `feed.js` in the routes folder.
 * Add server side validation as a middleware to the route.
+
+
+
+## delete posts
+
+* Configure the `deletePost` action in `feed.js` in the controllers folder.
+* Add a DELETE route for updating a post in `feed.js` in the routes folder.
+* Refactor reusable code to the functions `checkIfPostExists` and `reachNextError`.
