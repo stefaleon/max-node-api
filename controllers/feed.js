@@ -4,8 +4,6 @@ const {
 
 const Post = require('../models/post');
 
-
-
 // refactoring reusable code to functions
 
 const checkIfPostExists = post => {
@@ -27,11 +25,26 @@ const reachNextError = (err, next) => {
 // exports
 
 exports.getPosts = (req, res, next) => {
+  const currentPage = req.query.page || 1;  
+  const ITEMS_PER_PAGE = 4; 
+  let totalItems;
+  let itemCounterStartInCurrentPage;    
   Post.find()
+    .estimatedDocumentCount()
+    .then(number => {
+      totalItems = number;
+      itemCounterStartInCurrentPage = totalItems - ITEMS_PER_PAGE*(currentPage - 1);
+      return Post.find()
+        .sort({ createdAt: -1 })
+        .skip((currentPage - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
     .then(posts => {
       res.status(200).json({
         message: 'Posts fetched',
-        posts
+        posts,
+        totalItems,
+        itemCounterStartInCurrentPage
       });
     })
     .catch(err => reachNextError(err));

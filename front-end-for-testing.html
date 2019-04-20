@@ -21,20 +21,24 @@
     const getButton = document.getElementById('get');
     const postButton = document.getElementById('post');
     const erroredPostButton = document.getElementById('errored-post');
+    
+    const TESTPAGENUMBER = 2;
 
     getButton.addEventListener('click', () => {
-      fetch('http://localhost:8080/feed/posts')
+      fetch(`http://localhost:8080/feed/posts?page=${TESTPAGENUMBER}`)
         .then(res => res.json())
         .then(resData => {
           console.log(resData);          
           const postsDisplayArea = document.getElementById('display-posts');          
-          let counter = 0;
-          postsDisplayArea.innerHTML = '';
-          for (post in resData.posts) {            
+          let counter = resData.itemCounterStartInCurrentPage;                      
+          postsDisplayArea.innerHTML = 
+            `<b>Page #${TESTPAGENUMBER}, displaying ${resData.posts.length}
+            from a total of ${resData.totalItems} posts </b><br />`;          
+          for (let post of resData.posts) {            
             postsDisplayArea.innerHTML +=
-             `<a href="http://localhost:8080/feed/post/${resData.posts[counter]._id}" target="_blank">
-              <p>${counter + 1} ${resData.posts[counter].title}</p></a>`;
-            counter++;
+             `<a href="http://localhost:8080/feed/post/${post._id}" target="_blank">
+              <p>${counter} ${post.title}</p></a>`;
+            counter--;
           }
           
         })

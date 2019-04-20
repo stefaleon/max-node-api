@@ -159,3 +159,10 @@ __proto__: Object
 * Configure the `deletePost` action in `feed.js` in the controllers folder.
 * Add a DELETE route for updating a post in `feed.js` in the routes folder.
 * Refactor reusable code to the functions `checkIfPostExists` and `reachNextError`.
+
+
+## pagination
+
+* In the `getPosts` action in `feed.js` in the controllers folder, receive the `currentPage` parameter from the request query object.
+* Implement pagination logic. Data are sorted with the `createdAt` field descending (most recent first) and limited to a hardcoded number of items per page.
+* In the response data, provide the `totalItems` and `itemCounterStartInCurrentPage` properties to the front-end in order to be able to display a corresponding-to-the-total-amount-of-posts counter for each post. 
