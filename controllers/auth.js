@@ -14,6 +14,14 @@ const reachNextError = (err, next) => {
   next(err);
 };
 
+const checkIfUserExists = user => {
+  if (!user) {
+    const error = new Error('User not found.');
+    error.statusCode = 404;
+    throw error;
+  }
+};
+
 exports.putSignUp = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -43,3 +51,33 @@ exports.putSignUp = (req, res, next) => {
     });
 };
 
+
+exports.postLogIn = (req, res, next) => {
+  const email = req.body.email;  
+  const password = req.body.password;
+  let loadedUser;
+  User.findOne({ email: email })
+    .then(user => {
+      checkIfUserExists(user);      
+      loadedUser = user;
+      return bcrypt.compare(password, user.password)
+    })
+    .then(matching => {
+      if (!matching) {
+        const error = new Error('Wrong Password.');
+        error.statusCode = 401; // Not authenticated
+        throw error;
+      }
+      //TODO: generate JSON Web Token
+      // temporarily respond with a message and the loaded user
+      console.log(loadedUser);
+      res.status(200).json({
+        message: 'User found',
+        loadedUser
+      });
+
+    })
+    .catch(err => {
+      reachNextError(err, next);      
+    });
+};

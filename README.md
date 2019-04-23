@@ -254,3 +254,51 @@ response if the same request is resent:
 ```
 
 ---
+
+
+## user log in
+
+
+* In `controllers/auth.js`, configure the `postLogIn` action. The request body contains the user `email` and `password`. Search for the user in the db with the email address and if a user is found, compare the provided password with the hashed password in the db by use of `bcrypt.compare`. On success, temporarily respond with a message and the loaded user. The next step will be the creation of a JSON Web Token.
+
+* In `routes/auth.js`, configure the `log-in` POST route for user log-in, which routes to the `postLogIn` action.
+
+*Testing POST requests to http://localhost:8080/auth/log-in with Postman*
+
+---
+request body:
+```
+{
+	"email": "test@test.org",
+	"password": "12345"
+}
+```
+response:
+```
+{
+    "message": "User found",
+    "loadedUser": {
+        "status": "New User",
+        "posts": [],
+        "_id": "5cbf435006f76c473ce0f6f9",
+        "email": "test@test.org",
+        "name": "Test User",
+        "password": "$2a$12$ms4YW5ZD4n0RtwjTH15k..SZtRl/8pwxhF.YR2XOj5dCbLRDtiZVe",
+        "__v": 0
+    }
+}
+```
+---
+request body:
+```
+{
+    "email": "IDontExist@test.org",
+    "password": "12345"
+}
+```
+response:
+```
+{
+    "message": "User not found."
+}
+```
