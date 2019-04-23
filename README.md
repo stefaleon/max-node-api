@@ -166,3 +166,91 @@ __proto__: Object
 * In the `getPosts` action in `feed.js` in the controllers folder, receive the `currentPage` parameter from the request query object.
 * Implement pagination logic. Data are sorted with the `createdAt` field descending (most recent first) and limited to a hardcoded number of items per page.
 * In the response data, provide the `totalItems` and `itemCounterStartInCurrentPage` properties to the front-end in order to be able to display a corresponding-to-the-total-amount-of-posts counter for each post. 
+
+
+## user model
+
+* Add a model for the users in `models/user.js`.
+
+
+## user sign up authentication
+
+* Add `auth.js` in the routes folder.
+* Require and use the authentication routes in app.js. 
+* Add `auth.js` in the controllers folder and configure the `putSignUp` action. 
+* `npm install bcryptjs --save`
+* Require `bcryptjs` in `controllers/auth.js` in order to hash the created passwords.
+
+* In `routes/auth.js`, configure the `sign-up` PUT route for user sign-up, which routes to the `putSignUp` action. 
+* Implement validation for signing up with email.
+* Now users can sign-up via the `http://HOSTNAME:PORT/auth/sign-up` API endpoint. The method has to be set to `PUT`, the content type headers to `application/json` and the JSON-stringified body should contain the `email`, `password` and `name` values.
+
+*Testing PUT requests to http://localhost:8080/auth/sign-up with Postman*
+
+---
+request body:
+```
+{
+	"email": "test@test.org",
+	"password": "12345       "
+}
+```
+response:
+```
+{
+    "message": "Validation failed.",
+    "data": [
+        {
+            "location": "body",
+            "param": "name",
+            "msg": "Invalid value"
+        }
+    ]
+}
+```
+---
+
+---
+request body:
+```
+{
+	"email": "test@test.org",
+	"password": "12345       ",
+  "name": " Test User   "
+}
+```
+response:
+```
+{
+    "message": "User created.",
+    "userId": "5cbcf76b143dbd1574628856"
+}
+```
+
+Checking with MongoDB Compass, the following user is created in the db:
+```
+_id: 5cbcf76b143dbd1574628856
+status: "New User"
+posts: Array
+email: "test@test.org"
+name: "Test User"
+password: "$2a$12$w4I6LBCW2318f/zneFvXhOOVFagBfeyS.fP5BrG.JPrXz9SQIoBv6"
+__v:0
+```
+
+response if the same request is resent:
+```
+{
+    "message": "Validation failed.",
+    "data": [
+        {
+            "location": "body",
+            "param": "email",
+            "value": "test@test.org",
+            "msg": "This email address is already in use."
+        }
+    ]
+}
+```
+
+---
