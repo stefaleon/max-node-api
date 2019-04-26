@@ -1,11 +1,13 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const { validationResult } = require('express-validator/check');
 
 const User = require('../models/user');
 const private = require('../private/private.js');
 
-const APP_SERVER_URL = process.env.appServerUrl || private.appServerUrl;
+const SECRET = process.env.secret || private.secret;
+
 
 const reachNextError = (err, next) => {
   if (!err.statusCode) {
@@ -68,14 +70,14 @@ exports.postLogIn = (req, res, next) => {
         error.statusCode = 401; // Not authenticated
         throw error;
       }
-      //TODO: generate JSON Web Token
-      // temporarily respond with a message and the loaded user
-      console.log(loadedUser);
-      res.status(200).json({
-        message: 'User found',
-        loadedUser
-      });
-
+      const token = jwt.sign({
+        email: loadedUser.email,
+        userId: loadedUser._id.toString()
+        },
+        SECRET,
+        { expiresIn: '1h' }
+      );
+      res.status(200).json({ token, userId: loadedUser._id.toString() });
     })
     .catch(err => {
       reachNextError(err, next);      

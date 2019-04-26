@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Front End for user auth testing</title>
+</head>
+
+<body>
+
+  <p><b>Test form for the sign-up endpoint</b></p>
+  
+
+  <form>
+    <div>
+        <label for="email">Enter email: </label>
+        <input id="email" type="text" name="email" placeholder="proper email address">
+    </div>
+    <div>
+        <label for="password">Enter password: </label>
+        <input id="password" type="text" name="password" placeholder="password, 3 chars min">      
+    </div>
+    <div>
+        <label for="name">Enter name: </label>
+        <input id="name" type="text" name="name" placeholder="name, required">      
+    </div>
+  </form>
+  <br />
+
+  <p>Button click retrieves the form-data and creates an object to provide to the axios PUT call.</p>
+  <div>
+      <button>Send form data to the API</button>
+  </div>
+  
+  <p>On validation success, a new user is added to the db.</p>
+
+  
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script>
+
+    const formElement = document.querySelector('form');
+    const btn = document.querySelector('button');
+
+    // on button click, get the form data 
+    // pass the FormData object entries to a vanilla JS object
+    // and then make an axios PUT request to the sign-up endpoint
+
+    const sendRequest = () => {
+      const formData = new FormData(formElement);
+      const dataObject = {};
+      for (let [key, value] of formData.entries()) { 
+        console.log(key, value);
+        dataObject[key] = value;
+        console.log('dataObject', dataObject);
+      }
+      
+      axios.put('http://localhost:8080/auth/sign-up', dataObject)
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    };   
+    
+    btn.addEventListener('click', sendRequest);
+
+  </script>
+
+</body>
+
+</html>

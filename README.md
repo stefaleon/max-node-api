@@ -173,7 +173,7 @@ __proto__: Object
 * Add a model for the users in `models/user.js`.
 
 
-## user sign up authentication
+## user sign up
 
 * Add `auth.js` in the routes folder.
 * Require and use the authentication routes in app.js. 
@@ -302,3 +302,41 @@ response:
     "message": "User not found."
 }
 ```
+
+## create a jwt 
+
+* `npm install jsonwebtoken --save`
+* Require `jsonwebtoken` in `controllers/auth.js`. Create a token in the `postLogIn` action and pass it as an argument to the response data on succesful log-in.
+
+Testing POST requests to http://localhost:8080/auth/log-in with Postman*
+
+---
+request body:
+```
+{
+	"email": "test@test.org",
+	"password": "12345"
+}
+```
+response:
+```
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5vcmciLCJ1c2VySWQiOiI1Y2JmNDM1MDA2Zjc2YzQ3M2NlMGY2ZjkiLCJpYXQiOjE1NTYwNTQ4MDAsImV4cCI6MTU1NjA1ODQwMH0.7ZzxS8yNQZifcJGjksk576ngk3bA7ZgBKjE-95T_vm8",
+    "userId": "5cbf435006f76c473ce0f6f9"
+}
+```
+---
+
+
+## auth middleware
+
+* Configure `is-auth.js` in the `middleware` folder. Retrieve the token and verify it. If error checks pass, store the userId from the token to the request object and then call `next`.
+
+* Require `is-auth.js` and use the middleware in the `feed` routes in order to provide access only to authorized users.
+
+* In the front-end, the token can be send to the back-end with the use of a `headers` object which can contain the `Authorization` header, which has been allowed in `app.js` with `res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');`.
+
+
+*Check the updated version of `front-end-for-log-in-testing.html` for usage example*
+
+*For testing in Postman, after a succesful login POST request, copy the returned token. Paste it in the other routes' request headers, prefixed with `Bearer` and a whitespace*

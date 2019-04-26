@@ -11,6 +11,7 @@ const checkIfPostExists = post => {
     const error = new Error('Post not found.');
     error.statusCode = 404;
     throw error;
+    
   }
 };
 

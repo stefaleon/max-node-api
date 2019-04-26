@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Front End for user auth testing</title>
+</head>
+
+<body>
+
+  <p><b>Test form for the log-in endpoint</b></p>
+  
+
+  <form>
+    <div>
+        <label for="email">Enter email: </label>
+        <input id="email" type="text" name="email" placeholder="email address">
+    </div>
+    <div>
+        <label for="password">Enter password: </label>
+        <input id="password" type="text" name="password" placeholder="password">      
+    </div>    
+  </form>
+  <br />
+
+  <p>Button click retrieves the form-data and creates an object to provide to the axios POST call.</p>
+  <div>
+      <button id="login-button">Send form data to the API</button>
+  </div>
+  
+  <p>On validation success, a JWT and the user _id are returned.</p>
+
+  
+  <p>After successful login, send a GET request to get the posts.</p>
+  <p>In the fetch request, an appropriate headers argument has been included. It contains the Authorization header.</p>
+  <div>
+    <button id="get">Get Posts</button>
+  </div>
+
+  <hr />
+  <div id="display-posts">Posts Display Area</div>
+
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script>
+
+    const formElement = document.querySelector('form');
+    const btn = document.getElementById('login-button');
+    const getButton = document.getElementById('get');
+    let token;
+
+    // on button click, get the form data 
+    // pass the FormData object entries to a vanilla JS object
+    // and then make an axios POST request to the log-in endpoint
+
+    const sendRequest = () => {
+      const formData = new FormData(formElement);
+      const dataObject = {};
+      for (let [key, value] of formData.entries()) { 
+        console.log(key, value);
+        dataObject[key] = value;
+        console.log('dataObject', dataObject);
+      }
+      
+      axios.post('http://localhost:8080/auth/log-in', dataObject)
+        .then(res => {
+          console.log('The response is: ', res);
+          token = res.data.token;          
+          console.log('The token is: ', token);
+        })
+        .catch(err => console.log(err));
+    };   
+    
+    btn.addEventListener('click', sendRequest);
+
+
+    const TESTPAGENUMBER = 2;
+
+    getButton.addEventListener('click', () => {
+      console.log('getButton pressed, the token is: ', token);
+      
+      fetch(`http://localhost:8080/feed/posts?page=${TESTPAGENUMBER}`, {
+        headers: {
+          Authorization: 'Bearer ' + token          
+        }
+      })
+        .then(res => res.json())
+        .then(resData => {
+          console.log(resData);          
+          const postsDisplayArea = document.getElementById('display-posts');          
+          let counter = resData.itemCounterStartInCurrentPage;                      
+          postsDisplayArea.innerHTML = 
+            `<b>Page #${TESTPAGENUMBER}, displaying ${resData.posts.length}
+            from a total of ${resData.totalItems} posts </b><br />`;          
+          for (let post of resData.posts) {            
+            postsDisplayArea.innerHTML +=
+             `<a href="http://localhost:8080/feed/post/${post._id}" target="_blank">
+              <p>${counter} ${post.title}</p></a>`;
+            counter--;
+          }
+          
+        })
+        .catch(error => console.log(error));
+    });
+
+  </script>
+
+</body>
+
+</html>
